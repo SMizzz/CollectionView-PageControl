@@ -17,6 +17,9 @@ class ViewController: UIViewController {
     "sabaha"
   ]
   
+  var timer: Timer?
+  var currentCellIndex = 0
+  
   @IBOutlet weak var collectionView: UICollectionView!
   @IBOutlet weak var myPageControl: UIPageControl!
   
@@ -28,6 +31,17 @@ class ViewController: UIViewController {
     collectionView.dataSource = self
     myPageControl.currentPage = 0
     myPageControl.numberOfPages = posterImage.count
+    
+    timer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(slideToNext), userInfo: nil, repeats: true)
+  }
+  
+  @objc func slideToNext() {
+    if currentCellIndex < posterImage.count - 1 {
+      currentCellIndex = currentCellIndex + 1
+    } else {
+      currentCellIndex = 0
+    }
+    collectionView.scrollToItem(at: IndexPath(item: currentCellIndex, section: 0), at: .right, animated: true)
   }
 }
 
@@ -59,6 +73,5 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
   
   func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
     myPageControl.currentPage = indexPath.item
-    
   }
 }
